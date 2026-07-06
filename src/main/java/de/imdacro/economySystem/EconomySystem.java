@@ -7,16 +7,13 @@ import de.imdacro.economySystem.commands.PayCommand;
 import de.imdacro.economySystem.database.DatabaseManager;
 import de.imdacro.economySystem.database.LiteSQLManager;
 import de.imdacro.economySystem.database.MariaDBManager;
-import de.imdacro.economySystem.events.BalanceChangeEvent;
 import de.imdacro.economySystem.listener.PlayerJoinListener;
 import de.imdacro.economySystem.placeholderapi.MoneyTopExpansion;
 import de.imdacro.economySystem.utils.Messages;
 import de.imdacro.economySystem.utils.Metrics;
-import de.imdacro.economySystem.vault.Vault;
-import net.milkbowl.vault.permission.Permission;
+import de.imdacro.economySystem.vault.ReflectionVault;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -26,7 +23,6 @@ public final class EconomySystem extends JavaPlugin {
 
     private Messages messages;
     private DatabaseManager databaseManager;
-    private Permission permissions = null;
 
     @Override
     public void onLoad() {
@@ -41,7 +37,6 @@ public final class EconomySystem extends JavaPlugin {
         int pluginId = 27089;
         Metrics metrics = new Metrics(this, pluginId);
 
-        setupPermissions();
 
         metrics.addCustomChart(new Metrics.SimplePie("currency_type", () -> {
             return getConfig().getString("economy.currency-name");
@@ -65,10 +60,10 @@ public final class EconomySystem extends JavaPlugin {
 
         setupDatabase();
 
-        // Vault integration
-        new Vault(this);
+        // Vault integration (optional)
+        new ReflectionVault(this);
 
-        getServer().getConsoleSender().sendMessage(messages.get("plugin-enabled"));
+        getServer().getConsoleSender().sendMessage(messages.get("plugin-enabled") + "");
     }
 
     private void loadMessages() {
@@ -82,12 +77,6 @@ public final class EconomySystem extends JavaPlugin {
             e.printStackTrace();
             getLogger().severe("Error loading the Messages file!");
         }
-    }
-
-    private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        permissions = rsp.getProvider();
-        return permissions != null;
     }
 
 
@@ -118,7 +107,7 @@ public final class EconomySystem extends JavaPlugin {
             databaseManager.close();
         }
 
-        getServer().getConsoleSender().sendMessage(messages.get("plugin-disabled"));
+        getServer().getConsoleSender().sendMessage(messages.get("plugin-disabled") + "");
     }
 
     public Messages getMessages() {
@@ -129,7 +118,4 @@ public final class EconomySystem extends JavaPlugin {
         return databaseManager;
     }
 
-    public Permission getPermissions() {
-        return permissions;
-    }
 }
