@@ -49,9 +49,14 @@ public class Messages {
         }
 
         for (int i = 0; i < placeholders.length; i += 2) {
-            String placeholder = placeholders[i].toString();
-            String value = placeholders[i + 1].toString();
-            message = message.replace(placeholder, value);
+            // Guard against null placeholders to avoid NPEs (e.g., offline players without a known name)
+            Object keyObj = placeholders[i];
+            Object valObj = placeholders[i + 1];
+            String placeholder = keyObj == null ? "" : keyObj.toString();
+            String value = valObj == null ? "" : valObj.toString();
+            if (!placeholder.isEmpty()) {
+                message = message.replace(placeholder, value);
+            }
         }
         return message;
     }

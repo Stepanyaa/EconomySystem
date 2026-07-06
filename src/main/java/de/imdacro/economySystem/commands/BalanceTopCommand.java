@@ -35,7 +35,13 @@ public class BalanceTopCommand implements CommandExecutor {
                 String uuid = (String) topBalances.keySet().toArray()[i];
                 double balance = topBalances.get(uuid);
 
-                commandSender.sendMessage(plugin.getMessages().get("top-list-entry", "%position%", String.valueOf(i + 1), "%player%", plugin.getServer().getOfflinePlayer(UUID.fromString(uuid)).getName(), "%balance%", String.valueOf(balance)));
+                String playerName = plugin.getServer().getOfflinePlayer(UUID.fromString(uuid)).getName();
+                if (playerName == null) {
+                    // Fallback to UUID short representation when the player has never joined or name is unknown
+                    playerName = uuid;
+                }
+
+                commandSender.sendMessage(plugin.getMessages().get("top-list-entry", "%position%", String.valueOf(i + 1), "%player%", playerName, "%balance%", String.valueOf(balance)));
             }
         }
         // Don't send empty footer

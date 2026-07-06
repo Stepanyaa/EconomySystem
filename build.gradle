@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'de.imdacro'
-version = '1.31'
+version = '1.32'
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:26.2-R0.1-SNAPSHOT'
 
     // Add PlaceholderAPI
     compileOnly 'me.clip:placeholderapi:2.11.7'
