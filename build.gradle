@@ -23,13 +23,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:26.2-R0.1-SNAPSHOT'
+    compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
 
     // Add PlaceholderAPI
     compileOnly 'me.clip:placeholderapi:2.11.7'
 
     // Add Vault
-    compileOnly "com.github.MilkBowl:VaultAPI:1.7"
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
+        exclude group: "org.bukkit", module: "bukkit"
+    }
 
     // MariaDB JDBC Driver
     implementation 'com.zaxxer:HikariCP:5.1.0'
@@ -42,7 +44,7 @@ shadowJar {
     relocate 'org.mariadb.jdbc', 'de.imdacro.libs.mariadb'
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 25
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
